@@ -7,6 +7,8 @@ import json
 import random
 import pprint
 import scipy.misc
+import imageio
+import skimage
 import numpy as np
 from time import gmtime, strftime
 from six.moves import xrange
@@ -34,9 +36,9 @@ def save_images(images, size, image_path):
 
 def imread(path, grayscale = False):
   if (grayscale):
-    return scipy.misc.imread(path, flatten = True).astype(np.float)
+    return imageio.imread(path, flatten = True).astype(np.float)
   else:
-    return scipy.misc.imread(path).astype(np.float)
+    return imageio.imread(path).astype(np.float)
 
 def merge_images(images, size):
   return inverse_transform(images)
@@ -64,7 +66,7 @@ def merge(images, size):
 
 def imsave(images, size, path):
   image = np.squeeze(merge(images, size))
-  return scipy.misc.imsave(path, image)
+  return imageio.imsave(path, image)
 
 def center_crop(x, crop_h, crop_w,
                 resize_h=64, resize_w=64):
@@ -73,7 +75,7 @@ def center_crop(x, crop_h, crop_w,
   h, w = x.shape[:2]
   j = int(round((h - crop_h)/2.))
   i = int(round((w - crop_w)/2.))
-  return scipy.misc.imresize(
+  return skimage.transform.resize(
       x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
 
 def transform(image, input_height, input_width, 
@@ -83,7 +85,7 @@ def transform(image, input_height, input_width,
       image, input_height, input_width, 
       resize_height, resize_width)
   else:
-    cropped_image = scipy.misc.imresize(image, [resize_height, resize_width])
+    cropped_image = skimage.transform.resize(image, [resize_height, resize_width])
   return np.array(cropped_image)/127.5 - 1.
 
 def inverse_transform(images):
