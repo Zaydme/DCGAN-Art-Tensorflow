@@ -17,6 +17,7 @@ flags.DEFINE_integer("c_dim", 3, "Dimension of image color. For grayscale input,
 flags.DEFINE_integer("input_height", 108, "The size of image to use (will be center cropped). [108]")
 flags.DEFINE_integer("input_width", None, "The size of image to use (will be center cropped). If None, same value as input_height [None]")
 flags.DEFINE_integer("output_height", 64, "The size of the output images to produce [64]")
+flags.DEFINE_integer("option", 0, "Visualize options 1-4 for images, gifs etc.")
 flags.DEFINE_integer("output_width", None, "The size of the output images to produce. If None, same value as output_height [None]")
 flags.DEFINE_string("dataset", "celebA", "The name of dataset [celebA, mnist, lsun]")
 flags.DEFINE_string("input_fname_pattern", "*.jpg", "Glob pattern of filename of input images [*]")
@@ -46,10 +47,6 @@ def main(_):
   run_config = tf.ConfigProto(gpu_options=gpu_options)
   #run_confing = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
   run_config.gpu_options.allow_growth=True
-
-
-
-
 
   with tf.Session(config=run_config) as sess:
     if FLAGS.dataset == 'mnist':
@@ -95,14 +92,7 @@ def main(_):
         raise Exception("[!] Train a model first, then run test mode")
 
 
-    # to_json("./web/js/layers.js", [dcgan.h0_w, dcgan.h0_b, dcgan.g_bn0],
-    #                 [dcgan.h1_w, dcgan.h1_b, dcgan.g_bn1],
-    #                 [dcgan.h2_w, dcgan.h2_b, dcgan.g_bn2],
-    #                 [dcgan.h3_w, dcgan.h3_b, dcgan.g_bn3],
-    #                 [dcgan.h4_w, dcgan.h4_b, None])
-
-    # Below is codes for visualization
-    OPTION = 1
+    OPTION = FLAGS.option
     visualize(sess, dcgan, FLAGS, OPTION)
 
 if __name__ == '__main__':
